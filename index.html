@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Grid</title>
+		<meta content="text/html; charset=utf-8" http-equiv="content-type">
+		<meta name="description" content="" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+		<script type="text/javascript" src="js/freewall.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<style type="text/css">
+			.free-wall {
+				margin: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class='header'>
+			<div class="clearfix">
+				<div class="float-left">
+						<h1><a href="http://vnjs.net/www/project/freewall/">Design Works</a></h1>
+						<div class='target'>Some of my design works</div>
+				</div>
+			</div>
+		</div>
+		<div id="freewall" class="free-wall"></div>
+	
+		<script type="text/javascript">
+			//var index = 1;
+			var temp = "<div class='cell' style='width:{width}px; height: {height}px; background-image: url(images/{index}.jpg)'><a href= 'images/{index}.jpg'><div style='width:96%; padding-left:8px;' class='brick '><div class='float-left'><p style='font-sise: 10px !important;'> {design} </p></div></div></a></div>";
+			
+			var h= 1;
+			var  html = '', limitItem = 30;
+			
+			($.ajax({
+				  url: 'data.json',
+				  dataType: "json",
+				  success: function (data) {
+						console.log(data.images[0][1]);
+						
+						
+						
+						for (var i = 0; i < limitItem; ++i) {
+							h = 200 + 200 * Math.random() << 0;
+							
+							var desc = data.images[0][i+1];
+							
+							//console.log(desc);
+							
+							html += temp.replace(/\{height\}/g, h).replace(/\{width\}/g, 100).replace(/{index}/g, i + 1). replace(/{design}/g, desc);
+							
+						}
+						
+						$("#freewall").html(html);
+
+				  }
+			}));
+
+			
+			var ewall = new freewall("#freewall");
+			ewall.reset({
+				selector: '.cell',
+				animate: true,
+				cell: {
+					width: 150,
+					height: 20
+				},
+				onResize: function() {
+					ewall.fitWidth();
+				}
+			});
+			ewall.fitWidth();
+			// for scroll bar appear;
+			$(window).trigger("resize");
+		</script>
+	</body>
+</html>
